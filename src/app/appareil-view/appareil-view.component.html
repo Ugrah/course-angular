@@ -1,3 +1,16 @@
-<p>
-  appareil-view works!
-</p>
+<div class="col-xs-12">
+  <h2>Mes Appareils</h2>
+
+  <p>Mis à jour le : {{ lastUpdate | async | date: 'EEEE d MMMM y' | uppercase }}</p>
+
+  <ul class="list-group">
+    <app-appareil *ngFor="let appareil of appareils; let i = index"
+                  [indexOfAppareil]="i"
+                  [appareilName]="appareil.name"
+                  [appareilStatus]="appareil.status"></app-appareil>
+  </ul>
+  <button class="btn btn-success"
+          (click)="onAllumer()">Tout allumer</button>
+  <button class="btn btn-danger"
+          (click)="onEteindre()">Tout éteindre</button>
+</div>
