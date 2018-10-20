@@ -7,7 +7,7 @@ export class AppareilService {
     },
     {
       name: 'Télévision',
-      status: 'allumé'
+      status: 'éteint'
     },
     {
       name: 'Ordinateur',
