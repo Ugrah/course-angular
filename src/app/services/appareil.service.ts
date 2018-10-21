@@ -1,31 +1,15 @@
 import {Subject} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
+@Injectable()
 export class AppareilService {
 
   appareilSubject = new Subject<any[]>();
 
-  private appareils = [
-    {
-      id: 1,
-      name: 'Machine à laver',
-      status: 'éteint'
-    },
-    {
-      id: 2,
-      name: 'Télévision',
-      status: 'éteint'
-    },
-    {
-      id: 3,
-      name: 'Ordinateur',
-      status: 'éteint'
-    },
-    {
-      id: 4,
-      name: 'Fer à répasser',
-      status: 'éteint'
-    }
-  ];
+  private appareils = [];
+
+  constructor(private httpClient: HttpClient) {}
 
   emitAppareilSubject() {
     this.appareilSubject.next(this.appareils.slice());
@@ -76,6 +60,33 @@ export class AppareilService {
 
     this.appareils.push(appareilObject);
     this.emitAppareilSubject();
+  }
+
+  saveAppareilToServer() {
+    this.httpClient
+      .put('https://http-client-demo-b8882.firebaseio.com/appareils.json', this.appareils)
+      .subscribe(
+        () => {
+          console.log('Enregistrement terminé !');
+        },
+        (error) => {
+          console.log('Erreur de sauvegarde ' + error);
+        }
+      );
+  }
+
+  getAppareilFromServer() {
+    this.httpClient
+      .get<any[]>('https://http-client-demo-b8882.firebaseio.com/appareils.json')
+      .subscribe(
+        (response) => {
+          this.appareils = response;
+          this.emitAppareilSubject();
+        },
+        (error) => {
+          console.log('Erreur lors du chargement des données !' + error);
+        }
+      );
   }
 
 }
